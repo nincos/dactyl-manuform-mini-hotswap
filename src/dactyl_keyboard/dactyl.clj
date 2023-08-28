@@ -32,7 +32,7 @@
 
 (def thumb-offsets [6 -3 7])
 
-(def keyboard-z-offset 9)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
+(def keyboard-z-offset 12)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
 
 (def extra-width 2.5)                   ; extra space between the base of keys; original= 2
 (def extra-height 1.0)                  ; original= 0.5
@@ -53,7 +53,7 @@
 
 ; If you use Cherry MX or Gateron switches, this can be turned on.
 ; If you use other switches such as Kailh, you should set this as false
-(def create-side-nubs? true)
+(def create-side-nub? false)
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; General variables ;;
@@ -73,30 +73,32 @@
 (def sa-profile-key-height 12.7)
 
 (def plate-thickness 2)
+(def plate-thicknessy 5)
 (def side-nub-thickness 4)
 (def retention-tab-thickness 1.5)
-(def retention-tab-hole-thickness (- plate-thickness retention-tab-thickness))
+(def retention-tab-hole-thickness (- plate-thicknessy retention-tab-thickness))
 (def mount-width (+ keyswitch-width 3))
 (def mount-height (+ keyswitch-height 3))
 
 (def single-plate
-  (let [top-wall (->> (cube (+ keyswitch-width 3) 1.5 plate-thickness)
+  (let [top-wall (->> (cube (+ keyswitch-width 3) 1.5 plate-thicknessy)
                       (translate [0
                                   (+ (/ 1.5 2) (/ keyswitch-height 2))
-                                  (/ plate-thickness 2)]))
-        left-wall (->> (cube 1.5 (+ keyswitch-height 3) plate-thickness)
+                                  (/ plate-thicknessy 2)]))
+        left-wall (->> (cube 1.5 (+ keyswitch-height 3) plate-thicknessy)
                        (translate [(+ (/ 1.5 2) (/ keyswitch-width 2))
                                    0
-                                   (/ plate-thickness 2)]))
+                                   (/ plate-thicknessy 2)]))
         side-nub (->> (binding [*fn* 30] (cylinder 1 2.75))
                       (rotate (/ π 2) [1 0 0])
                       (translate [(+ (/ keyswitch-width 2)) 0 1])
-                      (hull (->> (cube 1.5 2.75 side-nub-thickness)
+                      (hull (->> (cube 1.5 2.75 plate-thicknessy)
                                  (translate [(+ (/ 1.5 2) (/ keyswitch-width 2))
                                              0
-                                             (/ side-nub-thickness 2)])))
-                      (translate [0 0 (- plate-thickness side-nub-thickness)]))
-        plate-half (union top-wall left-wall (if create-side-nubs? (with-fn 100 side-nub)))
+                                             (/ plate-thicknessy 2)]))))
+        plate-half (union top-wall
+                          left-wall
+                          (if create-side-nub? (with-fn 100 side-nub) ()))
         swap-holder (->> (cube (+ keyswitch-width 3) (/ (+ keyswitch-height 3) 2) 3)
                          (translate [0 (/ (+ keyswitch-height 3) 4) -1.5]))
         main-axis-hole (->> (cylinder (/ 4.0 2) 10)
@@ -111,12 +113,6 @@
                            (with-fn 8))
         friction-hole-right (translate [5 0 0] friction-hole)
         friction-hole-left (translate [-5 0 0] friction-hole)
-        top-nub (->> (cube 5 5 retention-tab-hole-thickness)
-                     (translate [(+ (/ keyswitch-width 2)) 0 (/ retention-tab-hole-thickness 2)]))
-        top-nub-pair (union top-nub
-                            (->> top-nub
-                                 (mirror [1 0 0])
-                                 (mirror [0 1 0])))
         hotswap-base-shape (->> (cube 14 5.80 1.8)
                                 (translate [-1 4 -2.1]))
         hotswap-base-hold-shape (->> (cube (/ 12 2) (- 6.2 4) 1.8)
@@ -148,15 +144,14 @@
                                    friction-hole-right
                                    hotswap-base
                                    (mirror [-1 0 0] hotswap-base))]
-    (difference
-     (union plate-half
+    (difference (union plate-half
                        (->> plate-half
                             (mirror [1 0 0])
                             (mirror [0 1 0]))
                        hotswap-holder)
-     (->>
-      top-nub-pair
-      (rotate (/ π 2) [0 0 1])))))
+                #_diode-holder
+                #_diode-wire-track
+                column-wire-track)))
 
 ;;;;;;;;;;;;;;;;
 ;; SA Keycaps ;;
