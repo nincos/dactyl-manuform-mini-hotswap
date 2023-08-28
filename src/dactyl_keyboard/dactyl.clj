@@ -84,43 +84,43 @@
   (let [top-wall (->> (cube (+ keyswitch-width 3) 1.5 plate-thicknessy)
                       (translate [0
                                   (+ (/ 1.5 2) (/ keyswitch-height 2))
-                                  (/ plate-thicknessy 2)]))
+                                  -0.5]))         ; original = (/ plate-thickness 2)
         left-wall (->> (cube 1.5 (+ keyswitch-height 3) plate-thicknessy)
                        (translate [(+ (/ 1.5 2) (/ keyswitch-width 2))
                                    0
-                                   (/ plate-thicknessy 2)]))
+                                   -0.5]))         ; original = (/ plate-thickness 2)
         side-nub (->> (binding [*fn* 30] (cylinder 1 2.75))
                       (rotate (/ π 2) [1 0 0])
                       (translate [(+ (/ keyswitch-width 2)) 0 1])
-                      (hull (->> (cube 1.5 2.75 plate-thicknessy)
+                      (hull (->> (cube 1.5 2.75 plate-thickness)
                                  (translate [(+ (/ 1.5 2) (/ keyswitch-width 2))
                                              0
-                                             (/ plate-thicknessy 2)]))))
+                                             (/ plate-thickness 2)]))))
         plate-half (union top-wall
                           left-wall
                           (if create-side-nub? (with-fn 100 side-nub) ()))
         swap-holder (->> (cube (+ keyswitch-width 3) (/ (+ keyswitch-height 3) 2) 3)
-                         (translate [0 (/ (+ keyswitch-height 3) 4) -1.5]))
+                         (translate [0 (/ (+ keyswitch-height 3) 4) (- -1.5 3)]))
         main-axis-hole (->> (cylinder (/ 4.0 2) 10)
                             (with-fn 12))
         plus-hole (->> (cylinder (/ 2.9 2) 10)
                        (with-fn 8)
-                       (translate [-3.81 2.54 0]))
+                       (translate [-3.81 2.54 -3]))
         minus-hole (->> (cylinder (/ 2.9 2) 10)
                         (with-fn 8)
-                        (translate [2.54 5.08 0]))
+                        (translate [2.54 5.08 -3]))
         friction-hole (->> (cylinder (/ 1.7 2) 10)
                            (with-fn 8))
-        friction-hole-right (translate [5 0 0] friction-hole)
-        friction-hole-left (translate [-5 0 0] friction-hole)
+        friction-hole-right (translate [5 0 -3] friction-hole)
+        friction-hole-left (translate [-5 0 -3] friction-hole)
         hotswap-base-shape (->> (cube 14 5.80 1.8)
-                                (translate [-1 4 -2.1]))
+                                (translate [-1 4 -5.1]))
         hotswap-base-hold-shape (->> (cube (/ 12 2) (- 6.2 4) 1.8)
-                                     (translate [(/ 12 4) (/ (- 6.2 4) 1) -2.1]))
+                                     (translate [(/ 12 4) (/ (- 6.2 4) 1) -5.1]))
         hotswap-pad (cube 4.00 3.0 2)
-        hotswap-pad-plus (translate [(- 0 (+ (/ 12.9 2) (/ 2.55 2))) 2.54 -2.1]
+        hotswap-pad-plus (translate [(- 0 (+ (/ 12.9 2) (/ 2.55 2))) 2.54 -5.1]
                                     hotswap-pad)
-        hotswap-pad-minus (translate [(+ (/ 10.9 2) (/ 2.55 2)) 5.08 -2.1]
+        hotswap-pad-minus (translate [(+ (/ 10.9 2) (/ 2.55 2)) 5.08 -5.1]
                                      hotswap-pad)
         wire-track (cube 4 (+ keyswitch-height 3) 1.8)
         column-wire-track (->> wire-track
