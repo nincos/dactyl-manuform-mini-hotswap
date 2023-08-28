@@ -97,17 +97,63 @@
                                              (/ side-nub-thickness 2)])))
                       (translate [0 0 (- plate-thickness side-nub-thickness)]))
         plate-half (union top-wall left-wall (if create-side-nubs? (with-fn 100 side-nub)))
+        swap-holder (->> (cube (+ keyswitch-width 3) (/ (+ keyswitch-height 3) 2) 3)
+                         (translate [0 (/ (+ keyswitch-height 3) 4) -1.5]))
+        main-axis-hole (->> (cylinder (/ 4.0 2) 10)
+                            (with-fn 12))
+        plus-hole (->> (cylinder (/ 2.9 2) 10)
+                       (with-fn 8)
+                       (translate [-3.81 2.54 0]))
+        minus-hole (->> (cylinder (/ 2.9 2) 10)
+                        (with-fn 8)
+                        (translate [2.54 5.08 0]))
+        friction-hole (->> (cylinder (/ 1.7 2) 10)
+                           (with-fn 8))
+        friction-hole-right (translate [5 0 0] friction-hole)
+        friction-hole-left (translate [-5 0 0] friction-hole)
         top-nub (->> (cube 5 5 retention-tab-hole-thickness)
                      (translate [(+ (/ keyswitch-width 2)) 0 (/ retention-tab-hole-thickness 2)]))
         top-nub-pair (union top-nub
                             (->> top-nub
                                  (mirror [1 0 0])
-                                 (mirror [0 1 0])))]
+                                 (mirror [0 1 0])))
+        hotswap-base-shape (->> (cube 14 5.80 1.8)
+                                (translate [-1 4 -2.1]))
+        hotswap-base-hold-shape (->> (cube (/ 12 2) (- 6.2 4) 1.8)
+                                     (translate [(/ 12 4) (/ (- 6.2 4) 1) -2.1]))
+        hotswap-pad (cube 4.00 3.0 2)
+        hotswap-pad-plus (translate [(- 0 (+ (/ 12.9 2) (/ 2.55 2))) 2.54 -2.1]
+                                    hotswap-pad)
+        hotswap-pad-minus (translate [(+ (/ 10.9 2) (/ 2.55 2)) 5.08 -2.1]
+                                     hotswap-pad)
+        wire-track (cube 4 (+ keyswitch-height 3) 1.8)
+        column-wire-track (->> wire-track
+                               (translate [9.5 0 -2.4]))
+        diode-wire-track (->> (cube 2 10 1.8)
+                              (translate [-7 8 -2.1]))
+        hotswap-base (union
+                      (difference hotswap-base-shape
+                                  hotswap-base-hold-shape)
+                      hotswap-pad-plus
+                      hotswap-pad-minus)
+        diode-holder (->> (cube 2 4 1.8)
+                          (translate [-7 5 -2.1]))
+        hotswap-holder (difference swap-holder
+                                   main-axis-hole
+                                   plus-hole
+                                   (mirror [-1 0 0] plus-hole)
+                                   minus-hole
+                                   (mirror [-1 0 0] minus-hole)
+                                   friction-hole-left
+                                   friction-hole-right
+                                   hotswap-base
+                                   (mirror [-1 0 0] hotswap-base))]
     (difference
      (union plate-half
-            (->> plate-half
-                 (mirror [1 0 0])
-                 (mirror [0 1 0])))
+                       (->> plate-half
+                            (mirror [1 0 0])
+                            (mirror [0 1 0]))
+                       hotswap-holder)
      (->>
       top-nub-pair
       (rotate (/ π 2) [0 0 1])))))
