@@ -830,7 +830,7 @@
                                ;usb-jack
                                ;trrs-holder-hole
                                (mirror [-1 0 0] screw-insert-holes))
-                       (debug usb-holder)
+                       ;(debug usb-holder)
                     )
                   (translate [0 0 -20] (cube 350 350 40))
                   ))
