@@ -84,11 +84,11 @@
   (let [top-wall (->> (cube (+ keyswitch-width 3) 1.5 plate-thicknessy)
                       (translate [0
                                   (+ (/ 1.5 2) (/ keyswitch-height 2))
-                                  -0.5]))         ; original = (/ plate-thickness 2)
+                                  -0.5]))         ; was (/ plate-thickness 2)
         left-wall (->> (cube 1.5 (+ keyswitch-height 3) plate-thicknessy)
                        (translate [(+ (/ 1.5 2) (/ keyswitch-width 2))
                                    0
-                                   -0.5]))         ; original = (/ plate-thickness 2)
+                                   -0.5]))         ; was (/ plate-thickness 2)
         side-nub (->> (binding [*fn* 30] (cylinder 1 2.75))
                       (rotate (/ π 2) [1 0 0])
                       (translate [(+ (/ keyswitch-width 2)) 0 1])
@@ -107,7 +107,7 @@
                                  (mirror [0 1 0])))
         swap-holder (->> (cube (+ keyswitch-width 3) (/ (+ keyswitch-height 3) 2) 3)
                          (translate [0 (/ (+ keyswitch-height 3) 4) (- -1.5 3)]))
-        main-axis-hole (->> (cylinder (/ 4.0 2) 10)
+        main-axis-hole (->> (cylinder (/ 4.0 2) 13)   ; was (cylinder (/ 4.0 2) 10)
                             (with-fn 12))
         plus-hole (->> (cylinder (/ 2.9 2) 10)
                        (with-fn 8)
@@ -142,14 +142,14 @@
                           (translate [-7 5 -2.1]))
         hotswap-holder (difference swap-holder
                                    main-axis-hole
-                                   plus-hole
-                                   ;(mirror [-1 0 0] plus-hole)       ; uncomment to mirror the switch holes
-                                   minus-hole
-                                   ;(mirror [-1 0 0] minus-hole)      ; uncomment to mirror the switch holes
+                                   ;plus-hole                        ; uncomment to mirror the switch holes
+                                   (mirror [-1 0 0] plus-hole)
+                                   ;minus-hole                       ; uncomment to mirror the switch holes
+                                   (mirror [-1 0 0] minus-hole)
                                    friction-hole-left
                                    friction-hole-right
-                                   hotswap-base
-                                   ;(mirror [-1 0 0] hotswap-base)    ; removes the friction-fit for hotswap socket 
+                                   ;hotswap-base                     ; removes the friction-fit for hotswap socket
+                                   (mirror [-1 0 0] hotswap-base)
                                    )]
           
     (difference (union plate-half
@@ -162,7 +162,8 @@
                   (rotate (/ π 2) [0 0 1]))
                 #_diode-holder
                 #_diode-wire-track
-                column-wire-track)))
+                ;column-wire-track            ; uncomment to have an indentation on one side of the switch inset
+                )))
 
 ;;;;;;;;;;;;;;;;
 ;; SA Keycaps ;;
