@@ -39,7 +39,7 @@
 
 (def wall-z-offset -5)                 ; original=-15 length of the first downward-sloping part of the wall (negative)
 (def wall-xy-offset 5)                  ; offset in the x and/or y direction for the first downward-sloping part of the wall (negative)
-(def wall-thickness 2)                  ; wall thickness parameter; originally 5
+(def wall-thickness 2.5)                  ; wall thickness parameter; originally 5
 
 ;; Settings for column-style == :fixed
 ;; The defaults roughly match Maltron settings
@@ -142,13 +142,13 @@
                           (translate [-7 5 -2.1]))
         hotswap-holder (difference swap-holder
                                    main-axis-hole
-                                   ;plus-hole                        ; uncomment to mirror the switch holes
+                                   ;plus-hole                        ; correct switch holes for right side
                                    (mirror [-1 0 0] plus-hole)
-                                   ;minus-hole                       ; uncomment to mirror the switch holes
+                                   ;minus-hole                       ; correct switch holes for right side
                                    (mirror [-1 0 0] minus-hole)
                                    friction-hole-left
                                    friction-hole-right
-                                   ;hotswap-base                     ; removes the friction-fit for hotswap socket
+                                   ;hotswap-base                     ; hotswap friction-fit base for right side
                                    (mirror [-1 0 0] hotswap-base)
                                    )]
           
@@ -362,6 +362,8 @@
              (key-place column (inc row) web-post-tr)
              (key-place (inc column) row web-post-bl)
              (key-place (inc column) (inc row) web-post-tl))))))
+
+
 
 ;;;;;;;;;;;;
 ;; Thumbs ;;
@@ -640,48 +642,69 @@
     (thumb-bl-place (translate (wall-locate3 -0.3 1) web-post-tr))
     (thumb-tl-place web-post-tl))))
 
-(def usb-holder-ref (key-position 0 0 (map - (wall-locate2  0  -1) [0 (/ mount-height 2) 0])))
+(def usb-holder (mirror [-1 0 0]
+                    (import "../things/holder v8.stl")))
 
-(def usb-holder-position (map + [17 19.3 0] [(first usb-holder-ref) (second usb-holder-ref) 2]))
-(def usb-holder-cube   (cube 15 12 2))
-(def usb-holder-space  (translate (map + usb-holder-position [0 (* -1 wall-thickness) 1]) usb-holder-cube))
-(def usb-holder-holder (translate usb-holder-position (cube 19 12 4)))
+(def bottom-height 0)
+(def bottom-height-half (/ bottom-height 2))
 
-(def usb-jack (translate (map + usb-holder-position [0 10 3]) (cube 8.1 20 3.1)))
+(def usb-holder (translate [26.5 58.6 bottom-height] usb-holder))
+(def usb-holder-space
+  (translate [0 0 (/ (+  bottom-height 8.2) 2)]
+  (extrude-linear {:height (+ bottom-height 8.2) :twist 0 :convexity 0}
+                  (offset 0.1
+                          (project usb-holder)))))
 
-(def pro-micro-position (map + (key-position 0 1 (wall-locate3 -1 0)) [-6 2 -15]))
-(def pro-micro-space-size [4 10 12]) ; z has no wall;
-(def pro-micro-wall-thickness 2)
-(def pro-micro-holder-size [(+ pro-micro-wall-thickness (first pro-micro-space-size)) (+ pro-micro-wall-thickness (second pro-micro-space-size)) (last pro-micro-space-size)])
-(def pro-micro-space
-  (->> (cube (first pro-micro-space-size) (second pro-micro-space-size) (last pro-micro-space-size))
-       (translate [(- (first pro-micro-position) (/ pro-micro-wall-thickness 2)) (- (second pro-micro-position) (/ pro-micro-wall-thickness 2)) (last pro-micro-position)])))
-(def pro-micro-holder
-  (difference
-   (->> (cube (first pro-micro-holder-size) (second pro-micro-holder-size) (last pro-micro-holder-size))
-        (translate [(first pro-micro-position) (second pro-micro-position) (last pro-micro-position)]))
-   pro-micro-space))
+(spit "things/test2.scad" (write-scad usb-holder))
 
-(def trrs-holder-size [6.2 10 2]) ; trrs jack PJ-320A
-(def trrs-holder-hole-size [6.2 10 6]) ; trrs jack PJ-320A
-(def trrs-holder-position  (map + usb-holder-position [-13.6 0 0]))
-(def trrs-holder-thickness 2)
-(def trrs-holder-thickness-2x (* 2 trrs-holder-thickness))
-(def trrs-holder
-  (union
-   (->> (cube (+ (first trrs-holder-size) trrs-holder-thickness-2x) (+ trrs-holder-thickness (second trrs-holder-size)) (+ (last trrs-holder-size) trrs-holder-thickness))
-        (translate [(first trrs-holder-position) (second trrs-holder-position) (/ (+ (last trrs-holder-size) trrs-holder-thickness) 2)]))))
-(def trrs-holder-hole
-  (union
+(def bottom-wall-usb-holder
+  (translate [0 0 bottom-height]
+             (extrude-linear {:height bottom-height-half :twist 0 :convexity 0}
+                             (offset 3 ))))
+(defn debug [shape]
+  (color [0.5 0.5 0.5 0.5] shape))
+;; (def usb-holder-ref (key-position 0 0 (map - (wall-locate2  0  -1) [0 (/ mount-height 2) 0])))
 
-  ; circle trrs hole
-   (->>
-    (->> (binding [*fn* 30] (cylinder 2.55 20))) ; 5mm trrs jack
-    (rotate (deg2rad  90) [1 0 0])
-    (translate [(first trrs-holder-position) (+ (second trrs-holder-position) (/ (+ (second trrs-holder-size) trrs-holder-thickness) 2)) (+ 3 (/ (+ (last trrs-holder-size) trrs-holder-thickness) 2))])) ;1.5 padding
+;; (def usb-holder-position (map + [17 19.3 0] [(first usb-holder-ref) (second usb-holder-ref) 2]))
+;; (def usb-holder-cube   (cube 15 12 2))
+;; (def usb-holder-space  (translate (map + usb-holder-position [0 (* -1 wall-thickness) 1]) usb-holder-cube))
+;; (def usb-holder-holder (translate usb-holder-position (cube 19 12 4)))
 
-  ; rectangular trrs holder
-   (->> (apply cube trrs-holder-hole-size) (translate [(first trrs-holder-position) (+ (/ trrs-holder-thickness -2) (second trrs-holder-position)) (+ (/ (last trrs-holder-hole-size) 2) trrs-holder-thickness)]))))
+;; (def usb-jack (translate (map + usb-holder-position [0 10 3]) (cube 8.1 20 3.1)))
+
+;; (def pro-micro-position (map + (key-position 0 1 (wall-locate3 -1 0)) [-6 2 -15]))
+;; (def pro-micro-space-size [4 10 12]) ; z has no wall;
+;; (def pro-micro-wall-thickness 2)
+;; (def pro-micro-holder-size [(+ pro-micro-wall-thickness (first pro-micro-space-size)) (+ pro-micro-wall-thickness (second pro-micro-space-size)) (last pro-micro-space-size)])
+;; (def pro-micro-space
+;;   (->> (cube (first pro-micro-space-size) (second pro-micro-space-size) (last pro-micro-space-size))
+;;        (translate [(- (first pro-micro-position) (/ pro-micro-wall-thickness 2)) (- (second pro-micro-position) (/ pro-micro-wall-thickness 2)) (last pro-micro-position)])))
+;; (def pro-micro-holder
+;;   (difference
+;;    (->> (cube (first pro-micro-holder-size) (second pro-micro-holder-size) (last pro-micro-holder-size))
+;;         (translate [(first pro-micro-position) (second pro-micro-position) (last pro-micro-position)]))
+;;    pro-micro-space))
+
+;; (def trrs-holder-size [6.2 10 2]) ; trrs jack PJ-320A
+;; (def trrs-holder-hole-size [6.2 10 6]) ; trrs jack PJ-320A
+;; (def trrs-holder-position  (map + usb-holder-position [-13.6 0 0]))
+;; (def trrs-holder-thickness 2)
+;; (def trrs-holder-thickness-2x (* 2 trrs-holder-thickness))
+;; (def trrs-holder
+;;   (union
+;;    (->> (cube (+ (first trrs-holder-size) trrs-holder-thickness-2x) (+ trrs-holder-thickness (second trrs-holder-size)) (+ (last trrs-holder-size) trrs-holder-thickness))
+;;         (translate [(first trrs-holder-position) (second trrs-holder-position) (/ (+ (last trrs-holder-size) trrs-holder-thickness) 2)]))))
+;; (def trrs-holder-hole
+;;   (union
+
+;;   ; circle trrs hole
+;;    (->>
+;;     (->> (binding [*fn* 30] (cylinder 2.55 20))) ; 5mm trrs jack
+;;     (rotate (deg2rad  90) [1 0 0])
+;;     (translate [(first trrs-holder-position) (+ (second trrs-holder-position) (/ (+ (second trrs-holder-size) trrs-holder-thickness) 2)) (+ 3 (/ (+ (last trrs-holder-size) trrs-holder-thickness) 2))])) ;1.5 padding
+
+;;   ; rectangular trrs holder
+;;    (->> (apply cube trrs-holder-hole-size) (translate [(first trrs-holder-position) (+ (/ trrs-holder-thickness -2) (second trrs-holder-position)) (+ (/ (last trrs-holder-hole-size) 2) trrs-holder-thickness)]))))
 
 (defn screw-insert-shape [bottom-radius top-radius height]
   (union
@@ -758,13 +781,15 @@
                    thumb-connectors
                    (difference (union case-walls
                                       screw-insert-outers
-                                      pro-micro-holder
-                                      usb-holder-holder
-                                      trrs-holder)
-                               usb-holder-space
-                               usb-jack
-                               trrs-holder-hole
-                               screw-insert-holes))
+                                      ;pro-micro-holder
+                                      ;usb-holder-holder
+                                      ;trrs-holder
+                                      )
+                               (mirror [-1 0 0] usb-holder-space)
+                               ;usb-jack
+                               ;trrs-holder-hole
+                               screw-insert-holes)
+                    (debug (mirror [-1 0 0] usb-holder)))
                   (translate [0 0 -20] (cube 350 350 40))))
 
 (spit "things/right.scad"
@@ -798,8 +823,8 @@
                                       screw-insert-outers)
                                (translate [0 0 -10] screw-insert-screw-holes))))))
 
-(spit "things/test.scad"
-      (write-scad
-       (difference trrs-holder trrs-holder-hole)))
+; (spit "things/test.scad"
+;      (write-scad
+;       (difference trrs-holder trrs-holder-hole)))
 
 (defn -main [dum] 1)  ; dummy to make it easier to batch
