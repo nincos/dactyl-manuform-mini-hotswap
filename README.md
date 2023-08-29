@@ -4,6 +4,17 @@ This is a fork of the [Dactyl-ManuForm](https://github.com/tshort/dactyl-keyboar
 
 Build log: https://www.beekeeb.com/dactyl-manuform-mini-mechanical-keyboard-build-log/
 
+## What's different
+
+This version is an implementation of the hotswap sockets from [dactyl-keyboard](https://github.com/ibnuda/dactyl-keyboard/tree/hotswap) along with the controller holder from [dactyl-manuform-tight](https://github.com/okke-formsma/dactyl-manuform-tight).
+
+Changes are
+ - Hotswap support! Friction fit for kailh hotswap sockets
+ - Sligthtly thicker to accomodate for the controller holder
+ - 7mm taller than the default manuform mini to allow space for sockets and wiring 
+ - Replaced the L bracket and supports at hole with slot for controller holder
+ - Support for TRISERT expanded to 136m3, option to switch to RUTHEX m3
+
 ## Forks
 
 - https://github.com/lebastaq/dactyl-manuform-mini-keyboard
@@ -37,7 +48,7 @@ Build log: https://www.beekeeb.com/dactyl-manuform-mini-mechanical-keyboard-buil
 
 ## License
 
-Copyright © 2015-2018 Matthew Adereth, Tom Short and Leo Lou
+Copyright © 2015-2023 Matthew Adereth, Tom Short, Leo Lou, Okke Formsma, Ibnu D. Aji and Nino Costa
 
 The source code for generating the models is distributed under the [GNU AFFERO GENERAL PUBLIC LICENSE Version 3](LICENSE).
 
