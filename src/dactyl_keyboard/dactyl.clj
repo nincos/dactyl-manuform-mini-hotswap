@@ -752,11 +752,11 @@
          (screw-insert 1 lastrow         bottom-radius top-radius height [0 -16 0])))
 
 ; Hole Depth Y: 4.4
-(def screw-insert-height 4)
+(def screw-insert-height 6.3) ; was 4
 
 ; Hole Diameter C: 4.1-4.4
-(def screw-insert-bottom-radius (/ 4.4 2))
-(def screw-insert-top-radius (/ 4.4 2))
+(def screw-insert-bottom-radius (/ 4 2)) ; was 4.4
+(def screw-insert-top-radius (/ 4 2))    ; was 4.4
 (def screw-insert-holes  (screw-insert-all-shapes screw-insert-bottom-radius screw-insert-top-radius screw-insert-height))
 
 ; Wall Thickness W:\t1.65
@@ -807,7 +807,8 @@
                                ;usb-jack
                                ;trrs-holder-hole
                                screw-insert-holes)
-                    (debug (mirror [-1 0 0] usb-holder)))
+                   ; (debug (mirror [-1 0 0] usb-holder))
+                  )
                   (translate [0 0 -20] (cube 350 350 40))
                   ))
 
@@ -829,7 +830,8 @@
                                ;usb-jack
                                ;trrs-holder-hole
                                (mirror [-1 0 0] screw-insert-holes))
-                    (debug usb-holder))
+                      ; (debug usb-holder)
+                    )
                   (translate [0 0 -20] (cube 350 350 40))
                   ))
 
