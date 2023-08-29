@@ -661,7 +661,7 @@
     (thumb-tl-place web-post-tl))))
 
 (def usb-holder (mirror [-1 0 0]
-                    (import "../things/holder v8.stl")))
+                    (import "../things/holder-v8.stl")))
 
 (def bottom-height 0)
 (def bottom-height-half (/ bottom-height 2))
@@ -830,7 +830,7 @@
                                ;usb-jack
                                ;trrs-holder-hole
                                (mirror [-1 0 0] screw-insert-holes))
-                      ; (debug usb-holder)
+                       (debug usb-holder)
                     )
                   (translate [0 0 -20] (cube 350 350 40))
                   ))

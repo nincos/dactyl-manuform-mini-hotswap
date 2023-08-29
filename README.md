@@ -26,14 +26,13 @@ Changes are
 
 ## Features
 
-- The use of sidenubs can be disabled. Sidenub should be disabled if you use Kailh, and Outemu. If you use Cherry MX, Gateron or Zealios switches, you can enable the sidenubs.
+- The use of sidenubs can be enabled. Sidenub should stay disabled if you use Kailh, and Outemu. If you use Cherry MX, Gateron or Zealios switches, you can enable the sidenubs.
 - Spaces for rentention tabs are added.
 - One key in the thumb cluster has been removed. Other thumb keys are also adjusted.
-- The total height is reduced and wire posts are removed. This results in a
-  higher printing speed and a lower cost.
+- wire posts are removed.
 - A TRRS mount instead of a RJ9 mount is used.
-- A micro USB mount is used. A breakout board, or an extension cable can be used.
-- Screw posts are moved inside. The holes are designed for TRISERT® thread inserts 145m3.
+- A breakout holder board is used for TRRS and Controller
+- Screw posts are moved inside. The holes are designed for TRISERT® thread inserts 145m3 or 136m3 and RUTHEX m3.
 - The pro micro holder has been modified. Dupont cables can be used.
 
 ## Generate OpenSCAD and STL models
