@@ -76,7 +76,7 @@
 (def plate-thicknessy 5)
 (def side-nub-thickness 4)
 (def retention-tab-thickness 1.5)
-(def retention-tab-hole-thickness (- plate-thicknessy retention-tab-thickness))
+(def retention-tab-hole-thickness (- plate-thickness retention-tab-thickness))
 (def mount-width (+ keyswitch-width 3))
 (def mount-height (+ keyswitch-height 3))
 
@@ -99,6 +99,12 @@
         plate-half (union top-wall
                           left-wall
                           (if create-side-nub? (with-fn 100 side-nub) ()))
+        top-nub (->> (cube 5 5 retention-tab-hole-thickness)
+                     (translate [(+ (/ keyswitch-width 2)) 0 (/ retention-tab-hole-thickness 2)]))
+        top-nub-pair (union top-nub
+                            (->> top-nub
+                                 (mirror [1 0 0])
+                                 (mirror [0 1 0])))
         swap-holder (->> (cube (+ keyswitch-width 3) (/ (+ keyswitch-height 3) 2) 3)
                          (translate [0 (/ (+ keyswitch-height 3) 4) (- -1.5 3)]))
         main-axis-hole (->> (cylinder (/ 4.0 2) 10)
@@ -137,18 +143,23 @@
         hotswap-holder (difference swap-holder
                                    main-axis-hole
                                    plus-hole
-                                   (mirror [-1 0 0] plus-hole)
+                                   ;(mirror [-1 0 0] plus-hole)       ; uncomment to mirror the switch holes
                                    minus-hole
-                                   (mirror [-1 0 0] minus-hole)
+                                   ;(mirror [-1 0 0] minus-hole)      ; uncomment to mirror the switch holes
                                    friction-hole-left
                                    friction-hole-right
                                    hotswap-base
-                                   (mirror [-1 0 0] hotswap-base))]
+                                   ;(mirror [-1 0 0] hotswap-base)    ; removes the friction-fit for hotswap socket 
+                                   )]
+          
     (difference (union plate-half
                        (->> plate-half
                             (mirror [1 0 0])
                             (mirror [0 1 0]))
                        hotswap-holder)
+                (->>
+                  top-nub-pair
+                  (rotate (/ π 2) [0 0 1]))
                 #_diode-holder
                 #_diode-wire-track
                 column-wire-track)))
