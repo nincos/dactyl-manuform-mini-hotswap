@@ -40,7 +40,7 @@
 (def wall-z-offset -5)                 ; original=-15 length of the first downward-sloping part of the wall (negative)
 (def wall-xy-offset 5)                  ; offset in the x and/or y direction for the first downward-sloping part of the wall (negative)
 (def wall-thickness 2.5)                  ; wall thickness parameter; originally 5, then 2, 2.5 allows for a better fit of the controller holder 
-(def trisert false)                     ; set to true for tappex trisert m3 screw mounts (4.1-4.4mm dia, 5.8mm depth), false for ruthex (4mm dia, 5.7+1mm depth)
+(def trisert true)                     ; set to true for tappex trisert m3 screw mounts (4.1-4.4mm dia, 5.8mm depth), false for ruthex (4mm dia, 5.7+1mm depth)
 ;; Settings for column-style == :fixed
 ;; The defaults roughly match Maltron settings
 ;;   http://patentimages.storage.googleapis.com/EP0219944A2/imgf0002.png
@@ -752,11 +752,11 @@
          (screw-insert 1 lastrow         bottom-radius top-radius height [0 -16 0])))
 
 ; Hole Depth Y: 4.4
-(def screw-insert-height 5.5) ; was 4
+(def screw-insert-height (if trisert 5.25 6)) ; was 4, 5.25mm straight depth to accomodate for trisert 136m3, 6mm for ruthex
 
 ; Hole Diameter C: 4.1-4.4
-(def screw-insert-bottom-radius (if trisert (/ 4.4 2) (/ 4 2))) ; was 4.4
-(def screw-insert-top-radius (if trisert (/ 4.4 2) (/ 4 2)))    ; was 4.4
+(def screw-insert-bottom-radius (if trisert (/ 4.3 2) (/ 4 2))) ; was 4.4
+(def screw-insert-top-radius (if trisert (/ 4.3 2) (/ 4 2)))    ; was 4.4
 (def screw-insert-holes  (screw-insert-all-shapes screw-insert-bottom-radius screw-insert-top-radius screw-insert-height))
 
 ; Wall Thickness W:\t1.65
