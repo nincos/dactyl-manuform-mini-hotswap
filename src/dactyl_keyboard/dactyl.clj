@@ -39,7 +39,7 @@
 
 (def wall-z-offset -5)                 ; original=-15 length of the first downward-sloping part of the wall (negative)
 (def wall-xy-offset 5)                  ; offset in the x and/or y direction for the first downward-sloping part of the wall (negative)
-(def wall-thickness 2.5)                  ; wall thickness parameter; originally 5
+(def wall-thickness 2.5)                  ; wall thickness parameter; originally 5, then 2, 2.5 allows for a better fit of the controller holder 
 
 ;; Settings for column-style == :fixed
 ;; The defaults roughly match Maltron settings
@@ -142,14 +142,14 @@
                           (translate [-7 5 -2.1]))
         hotswap-holder (difference swap-holder
                                    main-axis-hole
-                                   ;plus-hole                        ; correct switch holes for right side
-                                   (mirror [-1 0 0] plus-hole)
-                                   ;minus-hole                       ; correct switch holes for right side
-                                   (mirror [-1 0 0] minus-hole)
+                                   plus-hole                        ; correct switch holes for right side
+                                   ;(mirror [-1 0 0] plus-hole)
+                                   minus-hole                       ; correct switch holes for right side
+                                   ;(mirror [-1 0 0] minus-hole)
                                    friction-hole-left
                                    friction-hole-right
-                                   ;hotswap-base                     ; hotswap friction-fit base for right side
-                                   (mirror [-1 0 0] hotswap-base)
+                                   hotswap-base                     ; hotswap friction-fit base for right side
+                                   ;(mirror [-1 0 0] hotswap-base)
                                    )]
           
     (difference (union plate-half
@@ -289,6 +289,15 @@
                :when (or (.contains [2 3] column)
                          (not= row lastrow))]
            (->> single-plate
+                (key-place column row)))))
+
+(def key-holes-left
+  (apply union
+         (for [column columns
+               row rows
+               :when (or (.contains [2 3] column)
+                         (not= row lastrow))]
+           (->> (mirror [-1 0 0] single-plate)
                 (key-place column row)))))
 
 (def caps
@@ -439,6 +448,15 @@
   (union
    (thumb-1x-layout single-plate)
    (thumb-15x-layout single-plate)
+  ; (thumb-15x-layout larger-plate)
+))
+
+;; flips the switch holes for the thumb cluster around on right side 
+
+(def thumb-left
+  (union
+   (thumb-1x-layout (mirror [-1 0 0] single-plate))
+   (thumb-15x-layout  (mirror [-1 0 0] single-plate))
   ; (thumb-15x-layout larger-plate)
 ))
 
@@ -790,13 +808,36 @@
                                ;trrs-holder-hole
                                screw-insert-holes)
                     (debug (mirror [-1 0 0] usb-holder)))
-                  (translate [0 0 -20] (cube 350 350 40))))
+                  (translate [0 0 -20] (cube 350 350 40))
+                  ))
+
+(def model-left (difference
+                  (union
+                   (mirror [-1 0 0]key-holes-left)
+                   (mirror [-1 0 0]pinky-connectors)
+                   (mirror [-1 0 0]pinky-walls)
+                   (mirror [-1 0 0]connectors)
+                   (mirror [-1 0 0]thumb-left)
+                   (mirror [-1 0 0]thumb-connectors)
+                   (difference (union (mirror [-1 0 0] case-walls)
+                                      (mirror [-1 0 0] screw-insert-outers)
+                                      ;pro-micro-holder
+                                      ;usb-holder-holder
+                                      ;trrs-holder
+                                      )
+                               usb-holder-space
+                               ;usb-jack
+                               ;trrs-holder-hole
+                               (mirror [-1 0 0] screw-insert-holes))
+                    (debug usb-holder))
+                  (translate [0 0 -20] (cube 350 350 40))
+                  ))
 
 (spit "things/right.scad"
       (write-scad model-right))
 
 (spit "things/left.scad"
-      (write-scad (mirror [-1 0 0] model-right)))
+      (write-scad model-left))
 
 (spit "things/right-test.scad"
       (write-scad
