@@ -6,7 +6,7 @@ Build log: https://www.beekeeb.com/dactyl-manuform-mini-mechanical-keyboard-buil
 
 ## What's different
 
-This version is an implementation of the hotswap sockets from [dactyl-keyboard](https://github.com/ibnuda/dactyl-keyboard/tree/hotswap) along with the controller holder from [dactyl-manuform-tight](https://github.com/okke-formsma/dactyl-manuform-tight).
+This version is an implementation of the hotswap sockets from [dactyl-keyboard](https://github.com/ibnuda/dactyl-keyboard/tree/hotswap) along with the controller holder from [compactyl](https://github.com/dereknheiley/compactyl/), with some placement code taken from [dactyl-manuform-tight](https://github.com/okke-formsma/dactyl-manuform-tight).
 
 Changes are
  - Hotswap support! Friction fit for kailh hotswap sockets
@@ -47,7 +47,7 @@ Changes are
 
 ## License
 
-Copyright © 2015-2023 Matthew Adereth, Tom Short, Leo Lou, Okke Formsma, Ibnu D. Aji and Nino Costa
+Copyright © 2015-2023 Matthew Adereth, Tom Short, Leo Lou, Okke Formsma, Ibnu D. Aji, Derek Nheiley and Nino Costa
 
 The source code for generating the models is distributed under the [GNU AFFERO GENERAL PUBLIC LICENSE Version 3](LICENSE).
 

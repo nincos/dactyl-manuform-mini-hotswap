@@ -661,12 +661,12 @@
     (thumb-tl-place web-post-tl))))
 
 (def usb-holder (mirror [-1 0 0]
-                    (import "../things/holder-v8.stl")))
+                    (import "../things/usb-holder.stl")))
 
 (def bottom-height 0)
 (def bottom-height-half (/ bottom-height 2))
 
-(def usb-holder (translate [26.5 58.6 bottom-height] usb-holder))
+(def usb-holder (translate [23.5 58.6 bottom-height] usb-holder))
 (def usb-holder-space
   (translate [0 0 (/ (+  bottom-height 8.2) 2)]
   (extrude-linear {:height (+ bottom-height 8.2) :twist 0 :convexity 0}
@@ -807,7 +807,7 @@
                                ;usb-jack
                                ;trrs-holder-hole
                                screw-insert-holes)
-                   ; (debug (mirror [-1 0 0] usb-holder))
+                    ;(debug (mirror [-1 0 0] usb-holder))
                   )
                   (translate [0 0 -20] (cube 350 350 40))
                   ))
