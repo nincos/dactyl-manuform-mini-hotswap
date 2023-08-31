@@ -10,9 +10,9 @@ This version is an implementation of the hotswap sockets from [dactyl-keyboard](
 
 Changes are
  - Hotswap support! Friction fit for kailh hotswap sockets
- - Sligthtly thicker to accomodate for the controller holder
- - 7mm taller than the default manuform mini to allow space for sockets and wiring 
- - Replaced the L bracket and supports at hole with slot for controller holder
+ - Sligthtly thicker outside walls to accomodate for the controller holder
+ - 5mm taller than the default manuform mini to allow space for sockets and wiring 
+ - Replaced the L-shaped controller bracket and supports at the top wall with slot-in controller holder
  - Support for TRISERT expanded to 136m3, option to switch to RUTHEX m3
 
 ## Forks
