@@ -32,7 +32,7 @@
 
 (def thumb-offsets [6 -3 7])
 
-(def keyboard-z-offset 16)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
+(def keyboard-z-offset 14)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
 
 (def extra-width 2.5)                   ; extra space between the base of keys; original= 2
 (def extra-height 1.0)                  ; original= 0.5
@@ -660,25 +660,20 @@
     (thumb-bl-place (translate (wall-locate3 -0.3 1) web-post-tr))
     (thumb-tl-place web-post-tl))))
 
-(def usb-holder (mirror [-1 0 0]
-                    (import "../things/usb-holder.stl")))
+(def usb-holder (import "../things/usb-holder.stl"))
 
 (def bottom-height 0)
-(def bottom-height-half (/ bottom-height 2))
 
-(def usb-holder (translate [23.5 58.6 bottom-height] usb-holder))
+(def usb-holder (translate [-23.5 58.652 bottom-height] usb-holder))
 (def usb-holder-space
-  (translate [0 0 (/ (+  bottom-height 8.2) 2)]
-  (extrude-linear {:height (+ bottom-height 8.2) :twist 0 :convexity 0}
-                  (offset 0.1
+  (translate [0 0 (/ (+  bottom-height 8.4) 2)]
+  (extrude-linear {:height (+ bottom-height 8.4) :twist 0 :convexity 0}
+                  (offset 0.05                      ; was 0.1, lowered so middle post has a width of 1.4mm in the final print
                           (project usb-holder)))))
 
 (spit "things/test2.scad" (write-scad usb-holder))
 
-(def bottom-wall-usb-holder
-  (translate [0 0 bottom-height]
-             (extrude-linear {:height bottom-height-half :twist 0 :convexity 0}
-                             (offset 3 ))))
+
 (defn debug [shape]
   (color [0.5 0.5 0.5 0.5] shape))
 ;; (def usb-holder-ref (key-position 0 0 (map - (wall-locate2  0  -1) [0 (/ mount-height 2) 0])))
@@ -803,11 +798,11 @@
                                       ;usb-holder-holder
                                       ;trrs-holder
                                       )
-                               (mirror [-1 0 0] usb-holder-space)
+                               usb-holder-space
                                ;usb-jack
                                ;trrs-holder-hole
                                screw-insert-holes)
-                    ;(debug (mirror [-1 0 0] usb-holder))
+                    ;(debug usb-holder)
                   )
                   (translate [0 0 -20] (cube 350 350 40))
                   ))
@@ -826,11 +821,11 @@
                                       ;usb-holder-holder
                                       ;trrs-holder
                                       )
-                               usb-holder-space
+                               (mirror [-1 0 0] usb-holder-space)
                                ;usb-jack
                                ;trrs-holder-hole
                                (mirror [-1 0 0] screw-insert-holes))
-                       ;(debug usb-holder)
+                       ;(debug (mirror [-1 0 0] usb-holder))
                     )
                   (translate [0 0 -20] (cube 350 350 40))
                   ))
