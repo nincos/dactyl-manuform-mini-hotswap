@@ -119,10 +119,12 @@
                            (with-fn 8))
         friction-hole-right (translate [5 0 -3] friction-hole)
         friction-hole-left (translate [-5 0 -3] friction-hole)
-        hotswap-base-shape (->> (cube 14 5.80 1.8)
-                                (translate [-1 4 -5.1]))
-        hotswap-base-hold-shape (->> (cube (/ 12 2) (- 6.2 4) 1.8)
-                                     (translate [(/ 12 4) (/ (- 6.2 4) 1) -5.1]))
+        hotswap-base-shape (->> (cube 14 5.89 1.8)
+                                (translate [-1 3.95 -5.1]))
+        ; this is the square in the lower left corner to provide a friction fit for the hotswap sockets
+        ; originally set at (cube (/ 12 2) (- 6.2 4) 1.8), giving the socket 3.6mm(!) vs the required 4 
+        hotswap-base-hold-shape (->> (cube (/ 12 2) (- 5.93 4) 1.8) ; was (cube (/ 12 2) (- 6.2 4) 1.8)
+                                     (translate [(/ 12 4) (/ (- 5.93 4) 1) -5.1])) ; was (translate [(/ 12 4) (/ (- 6.2 4) 1) -5.1]))
         hotswap-pad (cube 4.00 3.0 2)
         hotswap-pad-plus (translate [(- 0 (+ (/ 12.9 2) (/ 2.55 2))) 2.54 -5.1]
                                     hotswap-pad)
@@ -668,7 +670,7 @@
 (def usb-holder-space
   (translate [0 0 (/ (+  bottom-height 8.4) 2)]
   (extrude-linear {:height (+ bottom-height 8.4) :twist 0 :convexity 0}
-                  (offset 0.05                      ; was 0.1, lowered so middle post has a width of 1.4mm in the final print
+                  (offset 0.1                      ; can be adjusted if you want a tighter fit on the controller holder
                           (project usb-holder)))))
 
 (spit "things/test2.scad" (write-scad usb-holder))
@@ -740,10 +742,8 @@
 (defn screw-insert-all-shapes [bottom-radius top-radius height]
   (union (screw-insert 0 0         bottom-radius top-radius height [11 10 0])
          (screw-insert 0 lastrow   bottom-radius top-radius height [0 0 0])
-        ;  (screw-insert lastcol lastrow  bottom-radius top-radius height [-5 13 0])
-        ;  (screw-insert lastcol 0         bottom-radius top-radius height [-3 6 0])
-         (screw-insert lastcol lastrow  bottom-radius top-radius height [0 12 0])
-         (screw-insert lastcol 0         bottom-radius top-radius height [0 7 0])
+         (if pinky-15u (screw-insert lastcol lastrow  bottom-radius top-radius height [0 12 0]) (screw-insert lastcol lastrow  bottom-radius top-radius height [-5 13 0]))
+         (if pinky-15u (screw-insert lastcol 0         bottom-radius top-radius height [0 7 0]) (screw-insert lastcol 0         bottom-radius top-radius height [-3 6 0]))
          (screw-insert 1 lastrow         bottom-radius top-radius height [0 -16 0])))
 
 ; Hole Depth Y: 4.4

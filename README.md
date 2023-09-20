@@ -9,11 +9,12 @@ Build log: https://www.beekeeb.com/dactyl-manuform-mini-mechanical-keyboard-buil
 This version is an implementation of the hotswap sockets from [dactyl-keyboard](https://github.com/ibnuda/dactyl-keyboard/tree/hotswap) along with the controller holder from [compactyl](https://github.com/dereknheiley/compactyl/), with some placement code taken from [dactyl-manuform-tight](https://github.com/okke-formsma/dactyl-manuform-tight).
 
 Changes are
- - Hotswap support! Friction fit for kailh hotswap sockets
+ - Hotswap support! Press fit for kailh hotswap sockets
  - Sligthtly thicker outside walls to accomodate for the controller holder
  - 5mm taller than the default manuform mini to allow space for sockets and wiring 
  - Replaced the L-shaped controller bracket and supports at the top wall with slot-in controller holder
  - Support for TRISERT expanded to 136m3, option to switch to RUTHEX m3
+ - Switching between 1u and 1.5u mods now has correct screwhole placement
 
 ## Forks
 
