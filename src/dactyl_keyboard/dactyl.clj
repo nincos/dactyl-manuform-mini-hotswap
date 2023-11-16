@@ -23,7 +23,7 @@
 (def column-style
   (if (> nrows 5) :orthographic :standard))  ; options include :standard, :orthographic, and :fixed
 ; (def column-style :fixed)
-(def pinky-15u true)
+(def pinky-15u false)
 
 (defn column-offset [column] (cond
                                (= column 2) [0 2.82 -4.5]
@@ -109,12 +109,12 @@
                          (translate [0 (/ (+ keyswitch-height 3) 4) (- -1.5 3)]))
         main-axis-hole (->> (cylinder (/ 4.0 2) 13)   ; was (cylinder (/ 4.0 2) 10)
                             (with-fn 12))
-        plus-hole (->> (cylinder (/ 2.9 2) 10)
-                       (with-fn 8)
-                       (translate [-3.81 2.54 -3]))
-        minus-hole (->> (cylinder (/ 2.9 2) 10)
-                        (with-fn 8)
-                        (translate [2.54 5.08 -3]))
+        plus-hole (->> (cylinder (/ 3.3 2) 10)
+                       (with-fn 12)
+                       (translate [-3.81 2.68 -3]))   ; was (translate [-3.81 2.54 -3]))
+        minus-hole (->> (cylinder (/ 3.3 2) 10)
+                        (with-fn 12)
+                        (translate [2.54 5.22 -3]))   ; was (translate [2.54 5.08 -3]))
         friction-hole (->> (cylinder (/ 1.7 2) 10)
                            (with-fn 8))
         friction-hole-right (translate [5 0 -3] friction-hole)
