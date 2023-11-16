@@ -36,6 +36,11 @@ Changes are
 - Screw posts are moved inside. The holes are designed for TRISERT® thread inserts 145m3 or 136m3 and RUTHEX m3.
 - The pro micro holder has been modified. Dupont cables can be used.
 
+## Issues
+
+- Hotswap socket hole distance/size needs to be adjusted
+- Press fit may be too tight for hotswap sockets
+
 ## Generate OpenSCAD and STL models
 
 * Run `lein generate` or `lein auto generate`
